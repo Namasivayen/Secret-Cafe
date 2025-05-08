@@ -5,27 +5,27 @@ from utils.media import save_media
 import os
 
 class PublishFrame(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, app=None):
         super().__init__(master)
-        self.master = master
+        self.app = app
         self.create_widgets()
         self.media_path = None
 
     def create_widgets(self):
-        tk.Label(self, text='Submit Your Story', font=('Arial', 18)).pack(pady=10)
-        tk.Label(self, text='Title:').pack(anchor='w')
-        self.title_entry = tk.Entry(self, width=60)
+        tk.Label(self, text='Submit Your Story', font=self.app.header_font, bg='#f7efe5', fg='#a47149').pack(pady=10)
+        tk.Label(self, text='Title:', bg='#f7efe5', font=self.app.custom_font).pack(anchor='w')
+        self.title_entry = tk.Entry(self, width=60, font=self.app.custom_font)
         self.title_entry.pack()
-        tk.Label(self, text='Genre/Theme:').pack(anchor='w')
-        self.genre_entry = tk.Entry(self, width=40)
+        tk.Label(self, text='Genre/Theme:', bg='#f7efe5', font=self.app.custom_font).pack(anchor='w')
+        self.genre_entry = tk.Entry(self, width=40, font=self.app.custom_font)
         self.genre_entry.pack()
-        tk.Label(self, text='Content:').pack(anchor='w')
-        self.content_text = tk.Text(self, width=70, height=15)
+        tk.Label(self, text='Content:', bg='#f7efe5', font=self.app.custom_font).pack(anchor='w')
+        self.content_text = tk.Text(self, width=70, height=15, font=self.app.custom_font)
         self.content_text.pack()
-        tk.Button(self, text='Attach Image', command=self.attach_media).pack(pady=5)
-        self.media_label = tk.Label(self, text='No image attached')
+        tk.Button(self, text='Attach Image', command=self.attach_media, bg=self.app.button_bg, fg=self.app.button_fg, font=self.app.custom_font).pack(pady=5)
+        self.media_label = tk.Label(self, text='No image attached', bg='#f7efe5', font=self.app.custom_font)
         self.media_label.pack()
-        tk.Button(self, text='Submit Story', command=self.submit_story).pack(pady=10)
+        tk.Button(self, text='Submit Story', command=self.submit_story, bg=self.app.button_bg, fg=self.app.button_fg, font=self.app.custom_font).pack(pady=10)
 
     def attach_media(self):
         file_path = filedialog.askopenfilename(filetypes=[('Image Files', '*.png;*.jpg;*.jpeg;*.gif')])

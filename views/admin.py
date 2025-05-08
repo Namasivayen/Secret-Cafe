@@ -4,15 +4,16 @@ from models.story import Story
 from models.user import User
 
 class AdminFrame(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, app=None):
         super().__init__(master)
-        self.master = master
+        self.app = app
         self.is_authenticated = False
         self.create_widgets()
 
     def create_widgets(self):
-        self.login_btn = tk.Button(self, text='Admin Login', command=self.admin_login)
+        self.login_btn = tk.Button(self, text='Admin Login', command=self.admin_login, bg=self.app.button_bg, fg=self.app.button_fg, font=self.app.custom_font)
         self.login_btn.pack(pady=10)
+        tk.Label(self, text='Admin Panel', font=self.app.header_font, bg='#f7efe5', fg='#a47149').pack(pady=5)
         self.tree = ttk.Treeview(self, columns=('Title', 'Genre', 'Date', 'Approved'), show='headings')
         self.tree.heading('Title', text='Title')
         self.tree.heading('Genre', text='Genre')
@@ -20,7 +21,7 @@ class AdminFrame(tk.Frame):
         self.tree.heading('Approved', text='Approved')
         self.tree.pack(fill='both', expand=True, pady=10)
         self.tree.bind('<Double-1>', self.on_story_select)
-        self.refresh_btn = tk.Button(self, text='Refresh', command=self.load_stories)
+        self.refresh_btn = tk.Button(self, text='Refresh', command=self.load_stories, bg=self.app.button_bg, fg=self.app.button_fg, font=self.app.custom_font)
         self.refresh_btn.pack(pady=5)
 
     def admin_login(self):

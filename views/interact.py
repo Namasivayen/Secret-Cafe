@@ -4,14 +4,15 @@ from models.story import Story
 from models.feedback import Feedback
 
 class InteractFrame(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, app=None):
         super().__init__(master)
         self.master = master
+        self.app = app
         self.create_widgets()
         self.load_stories()
 
     def create_widgets(self):
-        tk.Label(self, text='Interact with Stories', font=('Arial', 18)).pack(pady=10)
+        tk.Label(self, text='Interact with Stories', font=self.app.header_font, bg='#f7efe5', fg='#a47149').pack(pady=10)
         self.tree = ttk.Treeview(self, columns=('Title', 'Genre', 'Date'), show='headings')
         self.tree.heading('Title', text='Title')
         self.tree.heading('Genre', text='Genre')

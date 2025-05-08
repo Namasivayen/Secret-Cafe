@@ -3,24 +3,24 @@ from tkinter import ttk, messagebox
 from models.story import Story
 
 class DiscoverFrame(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, app=None):
         super().__init__(master)
-        self.master = master
+        self.app = app
         self.create_widgets()
         self.load_stories()
 
     def create_widgets(self):
-        tk.Label(self, text='Discover Stories', font=('Arial', 18)).pack(pady=10)
-        search_frame = tk.Frame(self)
+        tk.Label(self, text='Discover Stories', font=self.app.header_font, bg='#f7efe5', fg='#a47149').pack(pady=10)
+        search_frame = tk.Frame(self, bg='#f7efe5')
         search_frame.pack(pady=5)
-        tk.Label(search_frame, text='Search:').pack(side='left')
-        self.search_entry = tk.Entry(search_frame, width=30)
+        tk.Label(search_frame, text='Search:', bg='#f7efe5', font=self.app.custom_font).pack(side='left')
+        self.search_entry = tk.Entry(search_frame, width=30, font=self.app.custom_font)
         self.search_entry.pack(side='left')
-        tk.Label(search_frame, text='Genre:').pack(side='left')
-        self.genre_entry = tk.Entry(search_frame, width=15)
+        tk.Label(search_frame, text='Genre:', bg='#f7efe5', font=self.app.custom_font).pack(side='left')
+        self.genre_entry = tk.Entry(search_frame, width=15, font=self.app.custom_font)
         self.genre_entry.pack(side='left')
-        tk.Button(search_frame, text='Go', command=self.search_stories).pack(side='left', padx=5)
-        tk.Button(search_frame, text='Random', command=self.random_story).pack(side='left')
+        tk.Button(search_frame, text='Go', command=self.search_stories, bg=self.app.button_bg, fg=self.app.button_fg, font=self.app.custom_font).pack(side='left', padx=5)
+        tk.Button(search_frame, text='Random', command=self.random_story, bg=self.app.button_bg, fg=self.app.button_fg, font=self.app.custom_font).pack(side='left')
         self.tree = ttk.Treeview(self, columns=('Title', 'Genre', 'Date'), show='headings')
         self.tree.heading('Title', text='Title')
         self.tree.heading('Genre', text='Genre')
