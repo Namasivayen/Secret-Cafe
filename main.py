@@ -4,7 +4,6 @@ from PIL import Image, ImageTk
 import os
 from views.publish import PublishFrame
 from views.discover import DiscoverFrame
-from views.interact import InteractFrame
 from views.admin import AdminFrame
 
 class SecretCafeApp(tk.Tk):
@@ -48,14 +47,12 @@ class SecretCafeApp(tk.Tk):
         self.config(menu=menubar)
         menubar.add_command(label='Discover', command=lambda: self.show_frame('Discover'))
         menubar.add_command(label='Publish', command=lambda: self.show_frame('Publish'))
-        menubar.add_command(label='Interact', command=lambda: self.show_frame('Interact'))
         menubar.add_command(label='Admin', command=lambda: self.show_frame('Admin'))
 
     def show_frame(self, name):
         frame_classes = {
             'Publish': PublishFrame,
             'Discover': DiscoverFrame,
-            'Interact': InteractFrame,
             'Admin': AdminFrame
         }
         if name in self.frames:

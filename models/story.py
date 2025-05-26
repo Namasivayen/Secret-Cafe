@@ -24,6 +24,20 @@ class Story:
         return stories
 
     @staticmethod
+    def get_all_admin(filter_val='all'):
+        conn = get_connection()
+        c = conn.cursor()
+        if filter_val == 'unapproved':
+            c.execute('SELECT * FROM stories WHERE is_approved=0 ORDER BY created_at DESC')
+        elif filter_val == 'approved':
+            c.execute('SELECT * FROM stories WHERE is_approved=1 ORDER BY created_at DESC')
+        else:
+            c.execute('SELECT * FROM stories ORDER BY is_approved ASC, created_at DESC')
+        stories = c.fetchall()
+        conn.close()
+        return stories
+
+    @staticmethod
     def get_by_id(story_id):
         conn = get_connection()
         c = conn.cursor()

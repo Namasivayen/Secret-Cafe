@@ -14,6 +14,14 @@ class AdminFrame(tk.Frame):
         self.login_btn = tk.Button(self, text='Admin Login', command=self.admin_login, bg=self.app.button_bg, fg=self.app.button_fg, font=self.app.custom_font)
         self.login_btn.pack(pady=10)
         tk.Label(self, text='Admin Panel', font=self.app.header_font, bg='#f7efe5', fg='#a47149').pack(pady=5)
+        # Filter options
+        filter_frame = tk.Frame(self, bg='#f7efe5')
+        filter_frame.pack(pady=5)
+        tk.Label(filter_frame, text='Show:', bg='#f7efe5', font=self.app.custom_font).pack(side='left')
+        self.filter_var = tk.StringVar(value='all')
+        filter_options = [('All', 'all'), ('Unapproved', 'unapproved'), ('Approved', 'approved')]
+        for text, val in filter_options:
+            tk.Radiobutton(filter_frame, text=text, variable=self.filter_var, value=val, command=self.load_stories, bg='#f7efe5', font=self.app.custom_font).pack(side='left', padx=2)
         self.tree = ttk.Treeview(self, columns=('Title', 'Genre', 'Date', 'Approved'), show='headings')
         self.tree.heading('Title', text='Title')
         self.tree.heading('Genre', text='Genre')
@@ -42,7 +50,10 @@ class AdminFrame(tk.Frame):
             return
         for row in self.tree.get_children():
             self.tree.delete(row)
-        stories = Story.get_all(approved_only=False)
+        filter_val = self.filter_var.get()
+        stories = Story.get_all_admin(filter_val)
+        # Unapproved stories at the top
+        stories = sorted(stories, key=lambda s: (s[6] == 0), reverse=True)
         for s in stories:
             self.tree.insert('', 'end', iid=s[0], values=(s[1], s[3], s[5], 'Yes' if s[6] else 'No'))
 
@@ -58,7 +69,21 @@ class AdminFrame(tk.Frame):
     def show_admin_popup(self, story):
         popup = tk.Toplevel(self)
         popup.title(f'Admin: {story[1]}')
-        tk.Label(popup, text=story[2], wraplength=400, justify='left').pack(pady=10)
+        # Add a scrollable frame for the story content
+        content_frame = tk.Frame(popup)
+        content_frame.pack(fill='both', expand=True)
+        canvas = tk.Canvas(content_frame, width=450, height=350)
+        scrollbar = tk.Scrollbar(content_frame, orient='vertical', command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas)
+        scrollable_frame.bind(
+            '<Configure>',
+            lambda e: canvas.configure(scrollregion=canvas.bbox('all'))
+        )
+        canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.pack(side='left', fill='both', expand=True)
+        scrollbar.pack(side='right', fill='y')
+        tk.Label(scrollable_frame, text=story[2], wraplength=400, justify='left').pack(pady=10)
         btn_frame = tk.Frame(popup)
         btn_frame.pack(pady=5)
         if not story[6]:

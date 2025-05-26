@@ -24,7 +24,8 @@ def init_db():
         genre TEXT,
         media_path TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        is_approved INTEGER DEFAULT 0
+        is_approved INTEGER DEFAULT 0,
+        is_deleted INTEGER DEFAULT 0
     )''')
     # Feedback table
     c.execute('''CREATE TABLE IF NOT EXISTS feedback (
